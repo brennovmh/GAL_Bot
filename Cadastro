@@ -1,0 +1,61 @@
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver import ActionChains
+import time
+import pyautogui
+
+# Registrar dados do usuário
+user = input("Digite o seu login do GAL:")
+senha = input("Digite a sua senha do GAL:")
+CNES = input("Digite o seu número de CNS:")
+
+# Abrir navegador
+options = webdriver.ChromeOptions()
+options.add_argument('--ignore-ssl-errors=yes')
+options.add_argument('--ignore-certificate-errors')
+options.add_argument("--start-maximized")
+driver = webdriver.Chrome(options=options)
+driver.get("https://gal.distritofederal.sus.gov.br/")
+
+#Login
+driver.find_element(By.CSS_SELECTOR, "#ext-comp-1008").send_keys("brenno.henrique")
+driver.find_element(By.NAME, "senha").send_keys("B_07012910b")
+driver.find_element(By.NAME, "modulo").send_keys("BIOLOGIA")
+time.sleep(2)
+driver.find_element(By.XPATH, "/html/body/div[9]/div[1]/div").click()
+time.sleep(1)
+driver.find_element(By.ID, "ext-comp-1011").send_keys("LACEN-DF")
+time.sleep(1)
+driver.find_element(By.CSS_SELECTOR, "#ext-gen202 > div:nth-child(1)").click()
+time.sleep(1)
+driver.find_element(By.CSS_SELECTOR, "#ext-gen68").click()
+time.sleep(10)
+driver.find_element(By.CSS_SELECTOR, "#ext-gen308").click()
+time.sleep(2)
+driver.find_element(By.CSS_SELECTOR, "#ext-gen88").click()
+
+#Entrar na aba de registro
+action = ActionChains(driver)
+driver.find_element(By.CSS_SELECTOR, ".x-tree-root-node > li:nth-child(2) > div:nth-child(1) > img:nth-child(2)").click()
+time.sleep(2)
+entrada = driver.find_element(By.XPATH, "/html/body/div[4]/div[2]/div/div/div/div/ul/div/li[2]/ul/li[1]/div/a/span")
+action.double_click(on_element=entrada)
+action.perform()
+time.sleep(2)
+driver.find_element(By.XPATH, "/html/body/div[4]/div[2]/div/div/div/div/ul/div/li[2]/ul/li[1]/ul/li[1]/div/a/span").click()
+time.sleep(8)
+
+# Começar o cadastro
+### FALTA IMPORTAR DADOS DO EXCEL!!!!!!
+
+pyautogui.click(x=394, y=263) #Clicar em incluir
+time.sleep(2)
+pyautogui.click(x=768, y=362) #Clicar em Cód CNES
+pyautogui.write("0011371")
+pyautogui.press("tab")
+time.sleep(3)
+
+pyautogui.click(x=548, y=408) #Clicar em CNS do profissionsl
+pyautogui.write("801434359506762")
+pyautogui.press("tab")
+time.sleep(2)
