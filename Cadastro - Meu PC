@@ -43,19 +43,21 @@ action.double_click(on_element=entrada)
 action.perform()
 time.sleep(2)
 driver.find_element(By.XPATH, "/html/body/div[4]/div[2]/div/div/div/div/ul/div/li[2]/ul/li[1]/ul/li[1]/div/a/span").click()
-time.sleep(8)
+time.sleep(6)
 
 # Começar o cadastro
 ### FALTA IMPORTAR DADOS DO EXCEL!!!!!!
 
-pyautogui.click(x=394, y=263) #Clicar em incluir
-time.sleep(2)
-pyautogui.click(x=768, y=362) #Clicar em Cód CNES
-pyautogui.write("0011371")
+driver.switch_to.frame("content-panel")
+driver.find_element(By.XPATH, "/html/body/div[1]/div/div/div/div/div[1]/div/table/tbody/tr/td[3]/table/tbody/tr/td[2]/em/button").click()
+time.sleep(5)
+driver.find_element(By.XPATH, "/html/body/div[13]/div[2]/div[1]/div/div/div/div/div/div/div[1]/div[2]/div/fieldset[1]/div/div/div[1]/div/div/div/div/div/div/div[2]/div/div/div/div[1]/input").click()
+driver.find_element(By.XPATH, "/html/body/div[13]/div[2]/div[1]/div/div/div/div/div/div/div[1]/div[2]/div/fieldset[1]/div/div/div[1]/div/div/div/div/div/div/div[2]/div/div/div/div[1]/input").send_keys("0011371")
 pyautogui.press("tab")
-time.sleep(3)
+time.sleep(5)
 
-pyautogui.click(x=548, y=408) #Clicar em CNS do profissionsl
-pyautogui.write("801434359506762")
+driver.find_element(By.CSS_SELECTOR, "#ext-comp-1089").click()
+driver.find_element(By.CSS_SELECTOR, "#ext-comp-1089").send_keys("801434359506762")
 pyautogui.press("tab")
 time.sleep(2)
+
