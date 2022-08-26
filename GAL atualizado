@@ -1,0 +1,178 @@
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver import ActionChains
+import time
+import pyautogui
+import pandas as pd
+
+# Registrar dados do usuário
+user = input("Digite o seu login do GAL:")
+senha = input("Digite a sua senha do GAL:")
+CNES = input("Digite o seu número de CNS:")
+
+# Abrir navegador
+options = webdriver.ChromeOptions()
+options.add_argument('--ignore-ssl-errors=yes')
+options.add_argument('--ignore-certificate-errors')
+options.add_argument("--start-maximized")
+driver = webdriver.Chrome(options=options)
+driver.get("https://gal.distritofederal.sus.gov.br/")
+
+#Login
+driver.find_element(By.CSS_SELECTOR, "#ext-comp-1008").send_keys("brenno.henrique")
+driver.find_element(By.NAME, "senha").send_keys("C_07012910c")
+driver.find_element(By.NAME, "modulo").send_keys("BIOLOGIA")
+time.sleep(2)
+driver.find_element(By.XPATH, "/html/body/div[9]/div[1]/div").click()
+time.sleep(1)
+driver.find_element(By.ID, "ext-comp-1011").send_keys("LACEN-DF")
+time.sleep(1)
+driver.find_element(By.CSS_SELECTOR, "#ext-gen202 > div:nth-child(1)").click()
+time.sleep(1)
+driver.find_element(By.CSS_SELECTOR, "#ext-gen68").click()
+time.sleep(7)
+driver.find_element(By.CSS_SELECTOR, "#ext-gen308").click()
+time.sleep(2)
+driver.find_element(By.CSS_SELECTOR, "#ext-gen88").click()
+
+#Entrar na aba de registro
+action = ActionChains(driver)
+driver.find_element(By.CSS_SELECTOR, ".x-tree-root-node > li:nth-child(2) > div:nth-child(1) > img:nth-child(2)").click()
+time.sleep(2)
+entrada = driver.find_element(By.XPATH, "/html/body/div[4]/div[2]/div/div/div/div/ul/div/li[2]/ul/li[1]/div/a/span")
+action.double_click(on_element=entrada)
+action.perform()
+time.sleep(2)
+driver.find_element(By.XPATH, "/html/body/div[4]/div[2]/div/div/div/div/ul/div/li[2]/ul/li[1]/ul/li[1]/div/a/span").click()
+time.sleep(7)
+
+
+# Começar o cadastro
+import pandas as pd
+
+tabela = pd.read_table("tabela.txt")
+print(tabela)
+
+for i, solicitaca in enumerate(tabela["solicitacao"]):
+    finalidade = tabela.loc[i, "finalidade"]
+    descricao = tabela.loc[i, "descricao"]
+    CNS = tabela.loc[i, "CNS"]
+    motivo = tabela.loc[i, "motivo"]
+    tratamento = tabela.loc[i, "tratamento"]
+    populacao = tabela.loc[i, "populacao"]
+    contato = tabela.loc[i, "contato"]
+    amostra = tabela.loc[i, "amostra"]
+    quantidade = tabela.loc[i, "quantidade"]
+    pesquisa = tabela.loc[i, "pesquisa"]
+
+    driver.switch_to.frame("content-panel")  # Mudar para aba de cadastro
+    driver.find_element(By.XPATH,"/html/body/div[1]/div/div/div/div/div[1]/div/table/tbody/tr/td[3]/table/tbody/tr/td[2]/em/button").click()
+    time.sleep(6)
+    pyautogui.press('tab')
+    time.sleep(1)
+    pyautogui.write('0011371')
+    time.sleep(1)
+    pyautogui.press("tab")
+    time.sleep(3)
+        # Digitar CNES do profissional
+    driver.find_element(By.XPATH, '/html/body/div[12]/div[2]/div[1]/div/div/div/div/div/div/div[1]/div[2]/div/fieldset[1]/div/div/div[2]/div/div/div/div[1]/input').click()
+    driver.find_element(By.XPATH, '/html/body/div[12]/div[2]/div[1]/div/div/div/div/div/div/div[1]/div[2]/div/fieldset[1]/div/div/div[2]/div/div/div/div[1]/input').send_keys("801434359506762")
+    pyautogui.press("tab")
+    time.sleep(2)
+
+        # Digitar data de solicitação
+    driver.find_element(By.XPATH, '/html/body/div[12]/div[2]/div[1]/div/div/div/div/div/div/div[1]/div[2]/div/fieldset[2]/div/div/div[1]/div/div/div/div[1]/div/input').click()
+    driver.find_element(By.XPATH, '/html/body/div[12]/div[2]/div[1]/div/div/div/div/div/div/div[1]/div[2]/div/fieldset[2]/div/div/div[1]/div/div/div/div[1]/div/input').send_keys(solicitaca)
+    pyautogui.press("tab")
+    time.sleep(2)
+        # Digitar finalidade
+    driver.find_element(By.XPATH, '/html/body/div[12]/div[2]/div[1]/div/div/div/div/div/div/div[1]/div[2]/div/fieldset[2]/div/div/div[2]/div/div/div/div[1]/div/input').click()
+    driver.find_element(By.XPATH, '/html/body/div[12]/div[2]/div[1]/div/div/div/div/div/div/div[1]/div[2]/div/fieldset[2]/div/div/div[2]/div/div/div/div[1]/div/input').send_keys(finalidade)
+    pyautogui.press("down")
+    pyautogui.press("enter")
+    time.sleep(3)
+        # Digitar descrição
+    pyautogui.press("tab")
+    time.sleep(2)
+    pyautogui.press("backspace", presses = 1)
+    time.sleep(1)
+    driver.find_element(By.XPATH, '/html/body/div[12]/div[2]/div[1]/div/div/div/div/div/div/div[1]/div[2]/div/fieldset[2]/div/div/div[3]/div/div/div/div[1]/div/input').send_keys(descricao)
+    time.sleep(2)
+    pyautogui.press('tab')
+    time.sleep(1)
+
+        # Inserir CNS do paciente
+    driver.find_element(By.XPATH, '//*[@id="ext-comp-1099"]').click()
+    time.sleep(2)
+    driver.find_element(By.XPATH, '//*[@id="ext-comp-1099"]').send_keys(str(CNS))
+    time.sleep(1)
+    pyautogui.press('tab', presses = 17)
+    time.sleep(2)
+
+        # Agravo/Doença
+    driver.find_element(By.XPATH, '//*[@id="ext-comp-1159"]').send_keys(descricao)
+    time.sleep(1)
+    pyautogui.press('tab', presses = 2)
+    time.sleep(3)
+
+        # Finalidade do exame
+    driver.find_element(By.XPATH, '//*[@id="ext-comp-1318"]').send_keys(motivo)
+    time.sleep(2)
+    pyautogui.press('tab')
+
+        # Tratamento
+    time.sleep(2)
+    driver.find_element(By.XPATH, '//*[@id="ext-comp-1319"]').send_keys(tratamento)
+    time.sleep(1)
+    pyautogui.press('tab')
+    time.sleep(1)
+
+        # População
+    time.sleep(2)
+    driver.find_element(By.XPATH, '//*[@id="ext-comp-1316"]').send_keys(populacao)
+    time.sleep(2)
+    pyautogui.press('tab')
+    time.sleep(2)
+
+        # Contato
+    pyautogui.press(contato)
+    time.sleep(2)
+    pyautogui.press('tab')
+    time.sleep(2)
+
+        # Nova Amostra
+    driver.find_element(By.XPATH, '//*[@id="ext-comp-1179"]').send_keys(amostra)
+    pyautogui.press('tab')
+    time.sleep(2)
+    driver.find_element(By.XPATH, '//*[@id="ext-comp-1183"]').send_keys(str(quantidade))
+    time.sleep(2)
+    pyautogui.press('tab', presses = 2)
+    time.sleep(2)
+    driver.find_element(By.XPATH, '//*[@id="ext-comp-1185"]').send_keys(solicitaca)
+    time.sleep(2)
+    pyautogui.press('tab')
+    time.sleep(1)
+    pyautogui.press('tab')
+    driver.find_element(By.XPATH, '//*[@id="ext-gen1380"]').click()
+    time.sleep(1)
+    driver.find_element(By.XPATH, '//*[@id="ext-comp-1213"]').send_keys(pesquisa)
+    time.sleep(2)
+    pyautogui.press('tab')
+    time.sleep(2)
+    driver.find_element(By.XPATH, '//*[@id="ext-gen1463"]').click()
+    time.sleep(1)
+    pyautogui.press('down')
+    time.sleep(1)
+    pyautogui.press('enter')
+    time.sleep(1)
+    driver.find_element(By.XPATH, '//*[@id="ext-gen1482"]').click()
+    time.sleep(2)
+    driver.find_element(By.XPATH, '//*[@id="ext-gen308"]').click()
+    time.sleep(4)
+    driver.find_element(By.XPATH, '//*[@id="ext-gen2588"]').click()
+    time.sleep(4)
+    driver.switch_to.default_content()
+    time.sleep(2)
+
+
+
